@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Weather in Stockholm</title>
+
+    <link rel="icon" href="images/logo.png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <section class="weather-wrapper">
+        <div class="weather-info-wrapper">
+            <h1 id="city"></h1>
+            <p class="current-date" id="current-date"></p>
+            <p class="current-time" id="current-time"></p>
+            <div class="weather-info">
+                <p>Humidity <b><span id="humidity"></span></b></p>
+                <p>Wind <b><span id="wind"></span></b></p>
+                <p>Sunrise <b><span id="sunrise"></span></b></p>
+                <p>Sunset <b><span id="sunset"></span></b></p>
+            </div>
+        </div>
+        <div class="current-weather" id="current-weather">
+            <h1 id="current-temp"></h1>
+            <img src="images/cloudy.png" class="weather-icon" id="weather-icon" alt="" />
+        </div>
+    </section>
+    <section class="daily-forecast-wrapper">
+        <div class="daily-forecast">
+            <div onclick='alert("youClickedMe!")';>
+                <span class="arrow" >&#9658;</span>
+                <p id="day1"></p>
+                <p class="max-temp" id="max-temp1"></p>
+                <p class="min-temp" id="min-temp1"></p>
+                <img src="images/cloudy.png" class="forecast-icon" id="forecast-icon1" alt="Weather condition" />
+            </div>
+            <div>
+                <span class="arrow" >&#9658;</span>
+                <p id="day2"></p>
+                <p class="max-temp" id="max-temp2"></p>
+                <p class="min-temp" id="min-temp2"></p>
+                <img src="images/cloudy.png" class="forecast-icon" id="forecast-icon2" alt="Weather condition" />
+            </div>
+            <div>
+                <span class="arrow" >&#9658;</span>
+                <p id="day3"></p>
+                <p class="max-temp" id="max-temp3"></p>
+                <p class="min-temp" id="min-temp3"></p>
+                <img src="images/cloudy.png" class="forecast-icon" id="forecast-icon3" alt="Weather condition" />
+            </div>
+            <div>
+                <span class="arrow" >&#9658;</span>
+                <p id="day4"></p>
+                <p class="max-temp" id="max-temp4"></p>
+                <p class="min-temp" id="min-temp4"></p>
+                <img src="images/cloudy.png" class="forecast-icon" id="forecast-icon4" alt="Weather condition" />
+            </div>
+            <div>
+                <span class="arrow" >&#9658;</span>
+                <p id="day5"></p>
+                <p class="max-temp" id="max-temp5"></p>
+                <p class="min-temp" id="min-temp5"></p>
+                <img src="images/cloudy.png" class="forecast-icon" id="forecast-icon5" alt="Weather condition" />
+            </div>
+        </div>
+    </section>
+
+    <!--
+        - En startvy som visar vädret i Stockholm aktuell dag. Följande data skall finnas med
+        Aktuell plats, temperatur, datum och tid
+        - Github skall användas för att lagra och versionshantera all kod
+    -->
+    <script type="text/javascript" src="js/script.js"></script>
+
+</body>
+
+</html>
