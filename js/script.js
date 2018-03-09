@@ -53,22 +53,28 @@ function convertToMonth(monthNumber){
             break;
         case 6:
             monthName = "July";
+            break;
         case 7:
             monthName = "August";
+            break;
         case 8:
             monthName = "September";
+            break;
         case 9:
             monthName = "October";
+            break;
         case 10:
             monthName = "November";
+            break;
         case 11:
             monthName = "December";
+            break;
     }
     return monthName;
 }
 
 async function GetCurrentWeatherData() {
-    let weatherApi = await fetchData('http://api.openweathermap.org/data/2.5/weather?q=Stockholm,se&units=metric&APPID=030a58b09c02f547d5fb91d31800b695')
+    let weatherApi = await fetchData('https://api.openweathermap.org/data/2.5/weather?q=Stockholm,se&units=metric&APPID=030a58b09c02f547d5fb91d31800b695')
 
     let city = weatherApi.name;
     let temp = weatherApi.main.temp;
@@ -78,6 +84,7 @@ async function GetCurrentWeatherData() {
     let sunrise = weatherApi.sys.sunrise;
     let sunset = weatherApi.sys.sunset;
 
+    //Gör om unix timestamp (som används i JSON) till ett datum
     let currentWeatherDate = new Date();
     currentWeatherDate.setTime(weatherTimeStamp * 1000);
 
@@ -87,6 +94,11 @@ async function GetCurrentWeatherData() {
     let sunsetTime = new Date();
     sunsetTime.setTime(sunset * 1000);
 
+    //Gör så att klockslaget visas korrekt
+    let currentWeatherMinutes = currentWeatherDate.getMinutes();
+    if(currentWeatherMinutes < 10) {
+      currentWeatherMinutes = "0" + currentWeatherMinutes;
+    }
     let sunriseMinutes = sunriseTime.getMinutes();
     if(sunriseMinutes < 10) {
       sunriseMinutes = "0" + sunriseMinutes;
@@ -97,6 +109,7 @@ async function GetCurrentWeatherData() {
       sunsetMinutes = "0" + sunsetMinutes;
     }
 
+    //Ändrar ikonen för väderförhållande
     let icon = "weatherApi.weather[0].icon";
     let img = document.getElementById("weather-icon");
 
@@ -124,6 +137,7 @@ async function GetCurrentWeatherData() {
             break;
     }
 
+    //Hämtar in alla element där information ska visas
     let currentCity = document.getElementById('city');
     let currentTemp = document.getElementById('current-temp');
     let currentDate = document.getElementById('current-date');
@@ -133,10 +147,11 @@ async function GetCurrentWeatherData() {
     let sunriseP = document.getElementById('sunrise');
     let sunsetP = document.getElementById('sunset');
 
+    //Skriver ut informationen i elementen
     currentCity.innerHTML = "Weather in " + city;
     currentTemp.innerHTML = Math.round(temp * 10) / 10 + "°C";
     currentDate.innerHTML = convertToWeekday(currentWeatherDate.getDay()) + " " + currentWeatherDate.getDate() + " " + convertToMonth(currentWeatherDate.getMonth());
-    currentTime.innerHTML = "Latest updated at " + currentWeatherDate.getHours() + ":" + currentWeatherDate.getMinutes();
+    currentTime.innerHTML = "Latest updated at " + currentWeatherDate.getHours() + ":" + currentWeatherMinutes;
     currentHumidity.innerHTML = humidity + "%";
     currentWind.innerHTML = windSpeed + " m/s";
     sunriseP.innerHTML = sunriseTime.getHours()  + ":" + sunriseMinutes;
@@ -144,11 +159,15 @@ async function GetCurrentWeatherData() {
 }
 
 async function GetForecastData() {
-    let forecastApi = await fetchData('http://api.openweathermap.org/data/2.5/forecast?q=Stockholm,se&units=metric&APPID=030a58b09c02f547d5fb91d31800b695')
+    let forecastApi = await fetchData('https://api.openweathermap.org/data/2.5/forecast?q=Stockholm,se&units=metric&APPID=030a58b09c02f547d5fb91d31800b695')
 
-    let forecastArray = forecastApi.list;
+    let forecastList = forecastApi.list;
     let forecastTimeStamp = forecastApi.list[0].dt;
 
+    /* Tar fram dagens datum och de 4 nästkommande dagarna, eller datum för
+    de 5 nästkommande dagarna, beroende på när sidan visas (valde att göra detta
+    då API:en knappt visar någon information om den femte dagen om sidan visas
+    tidigt under dagen) */
     let forecastDate1 = new Date();
     forecastDate1.setTime(forecastTimeStamp * 1000);
 
@@ -164,6 +183,7 @@ async function GetForecastData() {
     let forecastDate5 = new Date();
     forecastDate5.setDate(forecastDate1.getDate()+4);
 
+    //Funktion för att hämta max och min temperatur för en dag
     function calculateMaxMinTemp(currentDay, currentMaxP, currentMinP) {
 
         let maxTemp;
@@ -179,22 +199,23 @@ async function GetForecastData() {
             currentDate = "0" + currentDate;
         }
 
-        for (let i = 0; i < forecastArray.length; i++) {
+        for (let i = 0; i < forecastList.length; i++) {
 
-            if (forecastArray[i].dt_txt.slice(5, 7) == currentMonth && forecastArray[i].dt_txt.slice(8, 10) == currentDate) {
+            //Kollar att månaden och datumet stämmer överens med den nuvarande objektet i listan
+            if (forecastList[i].dt_txt.slice(5, 7) == currentMonth && forecastList[i].dt_txt.slice(8, 10) == currentDate) {
 
                 if (maxTemp == null || minTemp == null) {
-                    maxTemp = forecastArray[i].main.temp_min;
-                    minTemp = forecastArray[i].main.temp_min;
+                    maxTemp = forecastList[i].main.temp_min;
+                    minTemp = forecastList[i].main.temp_min;
                 }
                 else {
 
-                    if (forecastArray[i].main.temp_max > maxTemp) {
-                        maxTemp = forecastArray[i].main.temp_max;
+                    if (forecastList[i].main.temp_max > maxTemp) {
+                        maxTemp = forecastList[i].main.temp_max;
                     }
 
-                    if (forecastArray[i].main.temp_min < minTemp) {
-                        minTemp = forecastArray[i].main.temp_min;
+                    if (forecastList[i].main.temp_min < minTemp) {
+                        minTemp = forecastList[i].main.temp_min;
                     }
                 }
             }
@@ -228,9 +249,9 @@ async function GetForecastData() {
             currentDate = "0" + currentDate;
         }
 
-        for (let i = 0; i < forecastArray.length; i++) {
+        for (let i = 0; i < forecastList.length; i++) {
 
-            if (forecastArray[i].dt_txt.slice(5, 7) == currentMonth && forecastArray[i].dt_txt.slice(8, 10) == currentDate) {
+            if (forecastList[i].dt_txt.slice(5, 7) == currentMonth && forecastList[i].dt_txt.slice(8, 10) == currentDate) {
 
                 if (forecastApi.list[i].weather[0].icon === "09d" || forecastApi.list[i].weather[0].icon === "09n" || forecastApi.list[i].weather[0].icon === "10d" || forecastApi.list[i].weather[0].icon === "10n") {
                     icon.src = 'images/rain.png';
