@@ -231,6 +231,7 @@ async function GetForecastData() {
         minTempParagraph.innerHTML = minTemp + "°C";
     }
 
+    //Funktion som hämtar väderikon beroende på hur vädret är under dagen
     function getForecastIcon(currentDay, iconImg) {
         let currentMonth = currentDay.getMonth() + 1;
         let currentDate = currentDay.getDate();
@@ -253,6 +254,7 @@ async function GetForecastData() {
 
             if (forecastList[i].dt_txt.slice(5, 7) == currentMonth && forecastList[i].dt_txt.slice(8, 10) == currentDate) {
 
+                //Om det regnar, snöar eller åskar under dagen visas detta
                 if (forecastApi.list[i].weather[0].icon === "09d" || forecastApi.list[i].weather[0].icon === "09n" || forecastApi.list[i].weather[0].icon === "10d" || forecastApi.list[i].weather[0].icon === "10n") {
                     icon.src = 'images/rain.png';
                     return false;
@@ -265,6 +267,7 @@ async function GetForecastData() {
                     icon.src = 'images/thunder.png';
                     return false;
                 }
+                //Annars beräknas antalet moln eller sol och då visas den som har mest
                 else {
 
                     if (forecastApi.list[i].weather[0].icon === "03d" || forecastApi.list[i].weather[0].icon === "03n" || forecastApi.list[i].weather[0].icon === "04d" || forecastApi.list[i].weather[0].icon === "04n") {

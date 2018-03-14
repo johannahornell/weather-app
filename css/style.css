@@ -11,7 +11,7 @@ html {
 }
 body {
     background-color: #567493;
-    background-image: url(../images/sky2.jpg);
+    background-image: url(../images/sky.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -24,7 +24,7 @@ body {
 }
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
-}
+} 
 
 /* -----> Today's weather <----- */
 .weather-wrapper {
@@ -90,15 +90,6 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     position: relative;
 }
-.daily-forecast div:hover {
-    background-color: rgba(26, 105, 173, 0.87);
-    cursor: pointer;
-}
-.arrow {
-    position: absolute;
-    left: 15px;
-    margin: 0;
-}
 .daily-forecast p {
   display: inline-block;
   width: 80px;
@@ -154,9 +145,6 @@ h1, h2, h3, h4, h5, h6 {
         width: 19%;
         display: block;
         padding: 1em;
-    }
-    .arrow {
-      display: none;
     }
     .daily-forecast p {
       display: block;
